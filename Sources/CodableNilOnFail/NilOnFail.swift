@@ -1,16 +1,19 @@
 @propertyWrapper
-public struct NilOnFail<Value>: Codable where Value: Codable & RawRepresentable {
-    
-    public var wrappedValue: Value?
+public struct NilOnFail<Value> where Value: RawRepresentable {
+    public private(set) var wrappedValue: Value?
     
     public init(wrappedValue: Value?) {
         self.wrappedValue = wrappedValue
     }
-    
+}
+
+extension NilOnFail: Decodable where Value: Decodable {
     public init(from decoder: Decoder) throws {
         self.wrappedValue = try? Value(from: decoder)
     }
-    
+}
+
+extension NilOnFail: Encodable where Value: Encodable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         if let value = wrappedValue {

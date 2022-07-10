@@ -1,12 +1,13 @@
 @propertyWrapper
-public struct LowercasedNilOnFail<Value>: Codable where Value: Codable & RawRepresentable, Value.RawValue == String {
-    
-    public var wrappedValue: Value?
+public struct LowercasedNilOnFail<Value> where Value: RawRepresentable, Value.RawValue == String {
+    public private(set) var wrappedValue: Value?
     
     public init(wrappedValue: Value?) {
         self.wrappedValue = wrappedValue
     }
-    
+}
+
+extension LowercasedNilOnFail: Decodable where Value: Decodable {
     public init(from decoder: Decoder) throws {
         guard
             let container = try? decoder.singleValueContainer(),
@@ -15,7 +16,9 @@ public struct LowercasedNilOnFail<Value>: Codable where Value: Codable & RawRepr
         
         self.wrappedValue = Value(rawValue: rawString.lowercased())
     }
-    
+}
+
+extension LowercasedNilOnFail: Encodable where Value: Encodable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         if let value = wrappedValue {
