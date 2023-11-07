@@ -1,5 +1,3 @@
-import Foundation
-
 @propertyWrapper
 public struct EmptyArrayOnFail<Value> where Value: Sequence, Value.Element: RawRepresentable {
     public private(set) var wrappedValue: Value
