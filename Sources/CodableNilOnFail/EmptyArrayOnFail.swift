@@ -27,16 +27,23 @@ extension EmptyArrayOnFail: Decodable where Value: Decodable, Value.Element: Dec
     }
 }
 
-extension EmptyArrayOnFail: Encodable where Value: Encodable, Value.Element: Encodable {
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(wrappedValue)
+extension EmptyArrayOnFail: Encodable where Value: Encodable, Value.Element: Decodable { }
+
+extension EmptyArrayOnFail: Equatable where Value: Equatable, Value.Element: Equatable { }
+
+public extension KeyedDecodingContainer {
+    func decode<Value: Sequence>(_: EmptyArrayOnFail<Value>.Type, forKey key: Key) throws -> EmptyArrayOnFail<Value> where Value: Decodable, Value.Element: Decodable {
+        if let value = try decodeIfPresent(EmptyArrayOnFail<Value>.self, forKey: key) {
+            return value
+        } else {
+            return EmptyArrayOnFail<Value>(wrappedValue: [Value.Element]() as! Value)
+        }
     }
 }
 
-extension EmptyArrayOnFail: Equatable where Value: Equatable, Value.Element: Equatable {
-    public static func == (lhs: EmptyArrayOnFail, rhs: EmptyArrayOnFail) -> Bool {
-        lhs.wrappedValue == rhs.wrappedValue
+public extension KeyedEncodingContainer {
+    mutating func encode<Value: Encodable>(_ value: EmptyArrayOnFail<Value>, forKey key: Key) throws {
+        try encode(value.wrappedValue, forKey: key)
     }
 }
 

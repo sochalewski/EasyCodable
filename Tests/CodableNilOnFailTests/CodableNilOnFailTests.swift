@@ -48,7 +48,10 @@ final class CodableNilOnFailTests: XCTestCase {
     }
     
     func testNilValue() {
-        let json = #"{"value1":null,"value2":null,"string":null,"array1":null,"array2":null,"bool1":null,"bool2":null}"#
+        let jsons = [
+            #"{"value1":null,"value2":null,"string":null,"array1":null,"array2":null,"bool1":null,"bool2":null}"#,
+            #"{}"#
+        ]
         let expectedModel = Model(
             value1: nil,
             value2: nil,
@@ -59,14 +62,16 @@ final class CodableNilOnFailTests: XCTestCase {
             bool2: false
         )
         
-        let model = try? decoder.decode(
-            Model.self,
-            from: json.data(using: .utf8)!
-        )
-        
-        XCTAssertEqual(model, expectedModel)
-        
-        XCTAssertEqual(model, try! decoder.decode(Model.self, from: try! encoder.encode(model)))
+        jsons.forEach { json in
+            let model = try? decoder.decode(
+                Model.self,
+                from: json.data(using: .utf8)!
+            )
+            
+            XCTAssertEqual(model, expectedModel)
+            
+            XCTAssertEqual(model, try! decoder.decode(Model.self, from: try! encoder.encode(model)))
+        }
     }
     
     func testUnsupportedValue() {

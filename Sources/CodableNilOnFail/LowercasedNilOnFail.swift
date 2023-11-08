@@ -18,19 +18,22 @@ extension LowercasedNilOnFail: Decodable where Value: Decodable {
     }
 }
 
-extension LowercasedNilOnFail: Encodable where Value: Encodable {
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        if let value = wrappedValue {
-            try container.encode(value)
+extension LowercasedNilOnFail: Encodable where Value: Encodable { }
+
+extension LowercasedNilOnFail: Equatable where Value: Equatable { }
+
+public extension KeyedDecodingContainer {
+    func decode<Value: Decodable>(_: LowercasedNilOnFail<Value>.Type, forKey key: Key) throws -> LowercasedNilOnFail<Value> {
+        if let value = try decodeIfPresent(LowercasedNilOnFail<Value>.self, forKey: key) {
+            return value
         } else {
-            try container.encodeNil()
+            return LowercasedNilOnFail<Value>(wrappedValue: nil)
         }
     }
 }
 
-extension LowercasedNilOnFail: Equatable where Value: Equatable {
-    public static func == (lhs: LowercasedNilOnFail, rhs: LowercasedNilOnFail) -> Bool {
-        lhs.wrappedValue == rhs.wrappedValue
+public extension KeyedEncodingContainer {
+    mutating func encode<Value: Encodable>(_ value: LowercasedNilOnFail<Value>, forKey key: Key) throws {
+        try encode(value.wrappedValue, forKey: key)
     }
 }

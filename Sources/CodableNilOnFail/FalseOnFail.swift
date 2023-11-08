@@ -13,15 +13,22 @@ extension FalseOnFail: Decodable {
     }
 }
 
-extension FalseOnFail: Encodable {
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(wrappedValue)
+extension FalseOnFail: Encodable { }
+
+extension FalseOnFail: Equatable { }
+
+public extension KeyedDecodingContainer {
+    func decode(_: FalseOnFail.Type, forKey key: Key) throws -> FalseOnFail {
+        if let value = try decodeIfPresent(FalseOnFail.self, forKey: key) {
+            return value
+        } else {
+            return FalseOnFail(wrappedValue: false)
+        }
     }
 }
 
-extension FalseOnFail: Equatable {
-    public static func == (lhs: FalseOnFail, rhs: FalseOnFail) -> Bool {
-        lhs.wrappedValue == rhs.wrappedValue
+public extension KeyedEncodingContainer {
+    mutating func encode(_ value: FalseOnFail, forKey key: Key) throws {
+        try encode(value.wrappedValue, forKey: key)
     }
 }
