@@ -1,5 +1,5 @@
 @propertyWrapper
-public struct EmptyArrayOnFail<Value> where Value: Sequence, Value.Element: RawRepresentable {
+public struct EmptyArrayOnFail<Value> where Value: Sequence {
     public private(set) var wrappedValue: Value
     
     public init(wrappedValue: Value) {
