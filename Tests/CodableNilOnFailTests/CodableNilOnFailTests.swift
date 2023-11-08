@@ -8,7 +8,9 @@ struct Model: Codable, Equatable {
     
     @NilOnFail var value1: Value?
     @LowercasedNilOnFail var value2: Value?
-    @EmptyArrayOnFail var array: [Value]
+    @NilOnFail var string: String?
+    @EmptyArrayOnFail var array1: [Value]
+    @EmptyArrayOnFail var array2: [String]
     @TrueOnFail var bool1: Bool
     @FalseOnFail var bool2: Bool
 }
@@ -20,13 +22,15 @@ final class CodableNilOnFailTests: XCTestCase {
     
     func testSupportedValue() {
         let jsons = [
-            #"{"value1":"first","value2":"SEcOnD","array":["first"],"bool1":false,"bool2":true}"#,
-            #"{"value1":"first","value2":"SEcOnD","array":["zeroth", "first", "fifth"],"bool1":false,"bool2":true}"#
+            #"{"value1":"first","value2":"SEcOnD","string":"lorem ipsum","array1":["first"],"array2":["first"],"bool1":false,"bool2":true}"#,
+            #"{"value1":"first","value2":"SEcOnD","string":"lorem ipsum","array1":["zeroth", "first", "fifth"],"array2":["first"],"bool1":false,"bool2":true}"#
         ]
         let expectedModel = Model(
             value1: .first,
             value2: .second,
-            array: [.first],
+            string: "lorem ipsum",
+            array1: [.first],
+            array2: ["first"],
             bool1: false,
             bool2: true
         )
@@ -44,11 +48,13 @@ final class CodableNilOnFailTests: XCTestCase {
     }
     
     func testNilValue() {
-        let json = #"{"value1":null,"value2":null,"array":null,"bool1":null,"bool2":null}"#
+        let json = #"{"value1":null,"value2":null,"string":null,"array1":null,"array2":null,"bool1":null,"bool2":null}"#
         let expectedModel = Model(
             value1: nil,
             value2: nil,
-            array: [],
+            string: nil,
+            array1: [],
+            array2: [],
             bool1: true,
             bool2: false
         )
@@ -65,13 +71,15 @@ final class CodableNilOnFailTests: XCTestCase {
     
     func testUnsupportedValue() {
         let jsons = [
-            #"{"value1":"third","value2":"fourth","array":["fifth"],"bool1":0,"bool2":1}"#,
-            #"{"value1":["third"],"value2":["fourth"],"array":"fifth","bool1":"sixth","bool2":"seventh"}"#
+            #"{"value1":"third","value2":"fourth","string":-1,"array1":["fifth"],"array2":0,"bool1":0,"bool2":1}"#,
+            #"{"value1":["third"],"value2":["fourth"],"string":["fifth"],"array1":"sixth","array2":"seventh","bool1":"eighth","bool2":"ninth"}"#
         ]
         let expectedModel = Model(
             value1: nil,
             value2: nil,
-            array: [],
+            string: nil,
+            array1: [],
+            array2: [],
             bool1: true,
             bool2: false
         )
