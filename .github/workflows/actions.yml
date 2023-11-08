@@ -1,4 +1,4 @@
-name: CodableNilOnFail
+name: EasyCodable
 
 on:
   push:

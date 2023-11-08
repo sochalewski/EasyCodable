@@ -1,5 +1,5 @@
 @propertyWrapper
-public struct EmptyArrayOnFail<Value> where Value: Sequence {
+public struct EasyEmptyArray<Value> where Value: Sequence {
     public private(set) var wrappedValue: Value
     
     public init(wrappedValue: Value) {
@@ -7,7 +7,7 @@ public struct EmptyArrayOnFail<Value> where Value: Sequence {
     }
 }
 
-extension EmptyArrayOnFail: Decodable where Value: Decodable, Value.Element: Decodable {
+extension EasyEmptyArray: Decodable where Value: Decodable, Value.Element: Decodable {
     public init(from decoder: Decoder) throws {
         var value = [Value.Element]()
         guard var container = try? decoder.unkeyedContainer() else {
@@ -27,22 +27,22 @@ extension EmptyArrayOnFail: Decodable where Value: Decodable, Value.Element: Dec
     }
 }
 
-extension EmptyArrayOnFail: Encodable where Value: Encodable, Value.Element: Decodable { }
+extension EasyEmptyArray: Encodable where Value: Encodable, Value.Element: Decodable { }
 
-extension EmptyArrayOnFail: Equatable where Value: Equatable, Value.Element: Equatable { }
+extension EasyEmptyArray: Equatable where Value: Equatable, Value.Element: Equatable { }
 
 public extension KeyedDecodingContainer {
-    func decode<Value: Sequence>(_: EmptyArrayOnFail<Value>.Type, forKey key: Key) throws -> EmptyArrayOnFail<Value> where Value: Decodable, Value.Element: Decodable {
-        if let value = try decodeIfPresent(EmptyArrayOnFail<Value>.self, forKey: key) {
+    func decode<Value: Sequence>(_: EasyEmptyArray<Value>.Type, forKey key: Key) throws -> EasyEmptyArray<Value> where Value: Decodable, Value.Element: Decodable {
+        if let value = try decodeIfPresent(EasyEmptyArray<Value>.self, forKey: key) {
             return value
         } else {
-            return EmptyArrayOnFail<Value>(wrappedValue: [Value.Element]() as! Value)
+            return EasyEmptyArray<Value>(wrappedValue: [Value.Element]() as! Value)
         }
     }
 }
 
 public extension KeyedEncodingContainer {
-    mutating func encode<Value: Encodable>(_ value: EmptyArrayOnFail<Value>, forKey key: Key) throws {
+    mutating func encode<Value: Encodable>(_ value: EasyEmptyArray<Value>, forKey key: Key) throws {
         try encode(value.wrappedValue, forKey: key)
     }
 }

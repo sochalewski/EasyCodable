@@ -1,21 +1,21 @@
 import XCTest
-@testable import CodableNilOnFail
+@testable import EasyCodable
 
 struct Model: Codable, Equatable {
     enum Value: String, Codable {
         case first, second
     }
     
-    @NilOnFail var value1: Value?
-    @LowercasedNilOnFail var value2: Value?
-    @NilOnFail var string: String?
-    @EmptyArrayOnFail var array1: [Value]
-    @EmptyArrayOnFail var array2: [String]
-    @TrueOnFail var bool1: Bool
-    @FalseOnFail var bool2: Bool
+    @EasyNil var value1: Value?
+    @EasyLowercasedNil var value2: Value?
+    @EasyNil var string: String?
+    @EasyEmptyArray var array1: [Value]
+    @EasyEmptyArray var array2: [String]
+    @EasyTrue var bool1: Bool
+    @EasyFalse var bool2: Bool
 }
 
-final class CodableNilOnFailTests: XCTestCase {
+final class EasyCodableTests: XCTestCase {
     
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()

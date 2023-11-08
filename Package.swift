@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "CodableNilOnFail",
+    name: "EasyCodable",
     platforms: [
         .iOS(.v9),
         .macOS(.v10_11),
@@ -12,17 +12,17 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "CodableNilOnFail",
-            targets: ["CodableNilOnFail"]
+            name: "EasyCodable",
+            targets: ["EasyCodable"]
         )
     ],
     targets: [
         .target(
-            name: "CodableNilOnFail"
+            name: "EasyCodable"
         ),
         .testTarget(
-            name: "CodableNilOnFailTests",
-            dependencies: ["CodableNilOnFail"]
+            name: "EasyCodableTests",
+            dependencies: ["EasyCodable"]
         )
     ]
 )

@@ -1,13 +1,13 @@
-# CodableNilOnFail
+# EasyCodable
 
 Easy failable optional enum properties in Swift Codable.
 
 ## Installation
 
-You can add CodableNilOnFail to an Xcode project by adding it as a package dependency.
+You can add EasyCodable to an Xcode project by adding it as a package dependency.
 
   1. From the **File** menu, select **Add Packages…**
-  2. Enter `https://github.com/sochalewski/CodableNilOnFail` into the package repository URL text field.
+  2. Enter `https://github.com/sochalewski/EasyCodable` into the package repository URL text field.
   3. Add the package to your app target.
 
 ## Why?
@@ -50,11 +50,11 @@ Unfortunately decoding this with `JSONDecoder` results in getting `nil` for the 
 
 This can be solved by custom `init(from:)` of the `Decodable` protocol, but that's a lot of boilerplate, especially when you have dozens of enums in your models.
 
-This is where CodableNilOnFail comes in!
+This is where EasyCodable comes in!
 
 ## Usage
 
-Just add the `@NilOnFail` property wrapper to your optional `RawRepresentable` properties.
+Just add the `@EasyNil` property wrapper to your optional `RawRepresentable` properties.
 
 ```swift
 struct Car: Codable, Equatable {
@@ -62,7 +62,7 @@ struct Car: Codable, Equatable {
         case toyota, volkswagen, ford, honda, generalMotors
     }
     
-    @NilOnFail var manufacturer: Manufacturer?
+    @EasyNil var manufacturer: Manufacturer?
     var vin: String?
     var owner: String?
 }
