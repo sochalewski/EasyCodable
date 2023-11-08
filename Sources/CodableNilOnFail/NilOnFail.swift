@@ -1,5 +1,5 @@
 @propertyWrapper
-public struct NilOnFail<Value> where Value: RawRepresentable {
+public struct NilOnFail<Value> {
     public private(set) var wrappedValue: Value?
     
     public init(wrappedValue: Value?) {
